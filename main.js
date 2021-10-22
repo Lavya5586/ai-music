@@ -12,12 +12,14 @@ function preload() {
     monday = loadSound("Imagine_Dragons_-_Monday.mp3");
 }
 
+scoreRightWrist = 0;
+scoreLeftWrist = 0;
+
 function setup() {
     canvas = createCanvas(600, 500);
     canvas.center();
 
     video = createCapture(VIDEO);
-    video.hide();
 
     poseNet = ml5.poseNet(video, modelLoaded);
     poseNet.on('pose', gotPoses);
@@ -28,6 +30,10 @@ function gotPoses(results)
     if (results.length > 0)
     {
         console.log(results);
+        scoreRightWrist = results[0].pose.keypoints[10].score;
+        scoreLeftWrist = results[0].pose.keypoints[9].score;
+        console.log("scoreRightWrist = " +scoreRightWrist+ "scoreLeftWrist = " +scoreLeftWrist);
+
         leftWristX = results[0].pose.leftWrist.x;
         leftwristY = results[0].pose.leftWrist.y;
         console.log("LeftWristX = " +leftWristX+ "LeftWristY = " +leftwristY);
@@ -45,4 +51,20 @@ function modelLoaded()
 
 function draw() {
     image(video, 0, 0, 600, 500);
+
+    song_play = "";
+
+    fill("#36f443");
+    stroke("#36f443");
+
+    if(scoreLeftWrist > 0.2)
+    {
+        circle(leftWristX, leftWristY, 20);
+        monday.stop();
+        if (its_ok.isPlaying() = "False")
+        {
+            its_ok.play();
+            document.getElementById("song_name_playing").innerHTML = "Song_nmae_plying = It's Ok";
+        }
+    }
 }
