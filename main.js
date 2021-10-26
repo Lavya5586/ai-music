@@ -1,16 +1,16 @@
 its_ok = "";
 monday = "";
 
+function preload() {
+    its_ok = loadSound("Imagine-Dragons-It-s-Ok.mp3");
+    monday = loadSound("Imagine_Dragons_-_Monday.mp3");
+}
+
 leftWristX = 0;
 leftWristY = 0;
 
 rightWristX = 0;
 rightWristY = 0;
-
-function preload() {
-    its_ok = loadSound("Imagine-Dragons-It-s-Ok.mp3");
-    monday = loadSound("Imagine_Dragons_-_Monday.mp3");
-}
 
 scoreRightWrist = 0;
 scoreLeftWrist = 0;
@@ -23,6 +23,11 @@ function setup() {
 
     poseNet = ml5.poseNet(video, modelLoaded);
     poseNet.on('pose', gotPoses);
+}
+
+function modelLoaded()
+{
+    console.log('PoseNet is inialized');
 }
 
 function gotPoses(results)
@@ -44,15 +49,11 @@ function gotPoses(results)
     }
 }
 
-function modelLoaded()
-{
-    console.log('PoseNet is inialized');
-}
-
 function draw() {
     image(video, 0, 0, 600, 500);
 
-    song_play = "";
+    song_play_left = "";
+    song_play_right = "";
 
     fill("#36f443");
     stroke("#36f443");
@@ -64,7 +65,20 @@ function draw() {
         if (its_ok.isPlaying() = "False")
         {
             its_ok.play();
-            document.getElementById("song_name_playing").innerHTML = "Song_nmae_plying = It's Ok";
+            document.getElementById("song_name_playing").innerHTML = "Song playing = It's Ok";
+        }
+    }
+
+    song_play_right = monday.isPlaying();
+
+    if(scoreRightWrist > 0.2)
+    {
+        circle(rightWristX, rightWristY, 20);
+        its_ok.stop();
+        if (song_play_right = "False")
+        {
+            monday.play();
+            document.getElementById("song_name_playing").innerHTML = "Song playing = Monday";
         }
     }
 }
